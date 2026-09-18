@@ -195,12 +195,46 @@ brew services restart ollama
 
 ### Slow responses or memory pressure
 
-Close memory-heavy apps, keep prompts focused, and inspect `ollama ps` and
-Activity Monitor. The first request loads the model and can take longer.
-With the full Copilot tool set, initial prompt processing can take several
-minutes on an 8 GiB M1 using both CPU and GPU.
-Reducing the context requires reducing the Copilot prompt/output budgets too.
-Do not bypass the memory check to run the 9B model on an 8 GiB Mac.
+The validated read/create task took 7 minutes 55 seconds on the 8 GiB M1.
+Ollama reported about 4.4 GB of model allocation split 31% CPU / 69% GPU.
+These percentages describe where the model is loaded, not instantaneous CPU
+or GPU utilization. See the [validation record](validation.md) for the setup.
+
+1. **Check memory pressure before closing apps.** In Activity Monitor's Memory
+   tab, look at Memory Pressure and whether Swap Used is growing during inference.
+   Yellow/red pressure or increasing swap suggests that quitting unused browser
+   windows, virtual machines, containers, and other models may help. Apple
+   Silicon shares memory between the CPU, GPU, and apps. Freeing RAM can reduce
+   swapping and may leave more room for GPU execution, but it does not guarantee
+   a faster response or full GPU allocation. An existing nonzero swap total alone
+   does not prove the current task is memory-starved. No before/after benchmark
+   of closing apps was performed.
+2. **Avoid unnecessary reloads.** Continue related work in the same Copilot
+   session. Ollama normally keeps the model loaded for five minutes after a
+   request, and subsequent turns may reuse prompt state. Restarting Ollama loses
+   that state. If you freed substantial RAM after the model was loaded, exit
+   Copilot and try `make stop` followed by `make start` once, then compare
+   `make status`; this lets Ollama reassess the available memory but incurs
+   another load and initial prompt-processing delay.
+3. **Keep the task and attached context small.** This reduces the extra work
+   beyond Copilot's fixed instructions and tool definitions. Those alone used
+   about 12.5K tokens in validation, so closing apps will not eliminate the
+   initial prompt-processing cost. A more restricted tool set can reduce that
+   overhead, but it also removes capabilities and needs separate validation.
+4. **Consider a smaller model or a Mac with more unified memory if it remains
+   too slow.** Smaller models can reduce memory requirements, with a possible
+   loss of coding and tool-calling quality. An alternative is not validated by
+   the current results: run `make verify` and test representative coding tasks
+   after changing `MODEL`. Do not bypass the memory check to run the 9B model
+   on an 8 GiB Mac.
+
+Reducing `CONTEXT_TOKENS` also requires fitting the prompt and output budgets
+inside it. Do not simply lower the prompt budget to 12K: that failed to start
+a normal Copilot session in testing. The current 32K runtime context leaves
+room for the normal tool set and the conversation.
+
+Ollama documents [processor allocation and model residency](https://docs.ollama.com/faq)
+and [context memory requirements](https://docs.ollama.com/context-length).
 
 ### Tool calls appear as JSON text
 

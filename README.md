@@ -11,9 +11,29 @@ context window, and verifies inference and a real file-tool call.
 - Internet access for the initial software and model downloads
 
 The default is `qwen3.5:4b` (about 3.4 GB) with a 32,768-token runtime context.
-On an 8 GiB Mac, close memory-heavy applications and keep coding tasks small.
-Processing Copilot's initial prompt can take several minutes on this hardware.
 No model-provider API key or GitHub login is required for local inference.
+
+> [!NOTE]
+> **Expect slow initial responses on an 8 GiB Mac.** Our M1 read-and-create
+> coding test took **7 minutes 55 seconds**. The model was split across CPU and
+> GPU, and Copilot's default instructions and tools already occupied about
+> 12.5K tokens before the task. This is one [measured run](Docs/validation.md),
+> not a prediction for every prompt or Mac.
+
+> [!TIP]
+> To reduce waiting:
+>
+> - Quit unused RAM-heavy apps, virtual machines, and containers before starting.
+>   This can help when memory pressure or swapping is high; it is not a
+>   guaranteed speedup, and we have not benchmarked the difference.
+> - Continue in the same Copilot session for related work and avoid restarting
+>   Ollama between prompts. Ollama normally keeps the model loaded for five
+>   minutes after a request, avoiding another model load during that time.
+> - Keep tasks focused and attach only relevant files. This reduces added
+>   context, although Copilot's initial instructions and tools still have a cost.
+> - Check **Activity Monitor → Memory → Memory Pressure** and `make status`.
+>   See [performance troubleshooting](Docs/detailed-setup.md#slow-responses-or-memory-pressure)
+>   for interpreting the results and considering smaller models or more RAM.
 
 ## Quick start
 
