@@ -1,0 +1,9 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+.ollama/
+.copilot/
+.copilot-local-offline/
+*.log
+copilot-session-*.md

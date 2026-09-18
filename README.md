@@ -1,0 +1,71 @@
+# Local LLM coding with GitHub Copilot CLI
+
+Run Qwen3.5 locally on an Apple Silicon Mac with Ollama and use it from GitHub
+Copilot CLI. The Makefile installs missing tools, downloads the model, sets its
+context window, and verifies inference and a real file-tool call.
+
+## Requirements
+
+- Apple Silicon Mac with [Homebrew](https://brew.sh)
+- At least 8 GiB unified memory and 10 GiB free disk for the default 4B model
+- Internet access for the initial software and model downloads
+
+The default is `qwen3.5:4b` (about 3.4 GB) with a 32,768-token runtime context.
+On an 8 GiB Mac, close memory-heavy applications and keep coding tasks small.
+Processing Copilot's initial prompt can take several minutes on this hardware.
+No model-provider API key or GitHub login is required for local inference.
+
+## Quick start
+
+```bash
+git clone https://github.com/IndrajeetPatil/local-llm-coding.git
+cd local-llm-coding
+make setup
+make verify
+make start
+```
+
+The repository is private; cloning it requires GitHub access. `make start`
+opens Copilot CLI using the local model. Exit Copilot from its UI when finished,
+then run `make stop` to stop Ollama and disable its automatic startup at login.
+
+## Commands
+
+| Command | Purpose |
+| --- | --- |
+| `make setup` | Install missing tools, start Ollama, download and configure the model. |
+| `make verify` | Check the API response and Copilot's ability to create a probe file. |
+| `make start` | Prepare Ollama and open Copilot CLI with the local model. |
+| `make stop` | Stop Ollama and unregister its Homebrew login service. |
+| `make status` | Show service, API, downloaded models, and GPU/context status. |
+| `make check-state` | Check required external files, tools, service, and model configuration. |
+| `make help` | Show targets and defaults. |
+
+Set `NO_COLOR=1` or `COLOR=never` for plain output.
+
+```mermaid
+flowchart LR
+    A["make start"] --> B["GitHub Copilot CLI"]
+    B -->|"Chat Completions over loopback"| C["Ollama"]
+    C --> D["Qwen3.5 4B · Apple GPU"]
+    D -->|"local response and tool calls"| B
+```
+
+Provider settings apply only to the Copilot process started by Make. It uses
+offline mode, disabled telemetry and built-in MCP servers, and a separate
+configuration directory. Normal `copilot` settings remain available to normal
+sessions. Commands you approve inside Copilot can still access the network.
+
+For a larger model on a Mac with at least 16 GiB RAM, use the same overrides
+for setup, verification, and each session:
+
+```bash
+export MODEL=qwen3.5:9b MIN_MEMORY_GIB=16 MIN_DISK_GIB=10
+export CONTEXT_TOKENS=32768 PROMPT_TOKENS=24576 OUTPUT_TOKENS=4096
+make setup
+make verify
+make start
+```
+
+See [the detailed guide](Docs/detailed-setup.md) for configuration, state stored
+outside Git, manual API checks, troubleshooting, and the limits of verification.
