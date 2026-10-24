@@ -73,6 +73,24 @@ calls return to Copilot, which executes permission-controlled file tools.](Docs/
 Responses return through Ollama to Copilot; Copilot controls tool execution
 against project files. Inference can use both CPU and GPU.
 
+### From model response to local action
+
+![Local response workflow: Qwen3.5 generates text or a tool proposal; Ollama
+encodes it as OpenAI-compatible Chat Completions; Copilot assembles the response,
+displays text, checks tool permissions, and returns tool results for another
+inference turn.](Docs/images/response-workflow.png)
+
+Ollama provides the shared message format that Copilot understands. Interactive
+responses stream as server-sent events (SSE) carrying JSON deltas; Copilot
+assembles text and structured tool calls. Text appears in the terminal. Tool
+calls pass through Copilot's permission checks before execution; their results
+return in the conversation for another local inference turn. This can repeat
+before the final reply. A denied tool does not execute, and text that merely
+looks like a tool call does not execute either.
+
+See [response handling and the wire format](Docs/detailed-setup.md#response-handling-and-the-wire-format)
+for the fields and the distinction between streaming and the direct API check.
+
 Provider settings apply only to the Copilot process started by Make. It uses
 offline mode, disabled telemetry and built-in MCP servers, and a separate
 configuration directory. Normal `copilot` settings remain available to normal
