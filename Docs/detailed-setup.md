@@ -119,6 +119,38 @@ cd /path/to/your/project
 make -f /path/to/local-llm-coding/Makefile start
 ```
 
+### Response handling and the wire format
+
+The response path is Qwen3.5 → Ollama's OpenAI-compatible API → Copilot's
+provider adapter → terminal output or permission-controlled tool execution.
+The [response workflow illustration](../README.md#from-model-response-to-local-action)
+shows both branches and the tool-result loop. This describes the configured
+protocol and client responsibilities, rather than a captured packet trace.
+
+The Makefile selects `COPILOT_PROVIDER_WIRE_API=completions`, with base URL
+`http://127.0.0.1:11434/v1`. Requests go to `/chat/completions` with conversation
+messages, the derived model name, and tool definitions when tools are available.
+Here, **OpenAI-compatible** names the data contract; inference runs in Ollama
+on the Mac.
+
+| Stage | Format and meaning |
+| --- | --- |
+| Interactive response | SSE events carry JSON chunks. `choices[0].delta` supplies incremental text or tool-call fields; the client assembles them. |
+| Completed assistant message | `content` holds text; `tool_calls` holds structured proposals with call IDs, function names and arguments. On this compatible endpoint, function arguments are JSON encoded as a string. |
+| Tool execution | Copilot checks permissions and dispatches allowed tools. The model and Ollama do not execute Copilot's file tools. A denied call does not execute. |
+| Follow-up request | The assistant tool call and its result (`role: "tool"`, linked by `tool_call_id`) join the conversation sent back to Ollama. Further tool turns may follow before a final reply. |
+| Direct API verification | `make verify-ollama` sets `stream: false`; it receives one JSON response and checks `choices[0].message.content` with `jq`. This is separate from interactive response handling. |
+
+Tool-call arguments must be assembled and interpreted as structured data;
+printing JSON-looking text in `content` does not invoke a tool. Text and tool
+calls may occur in the same assistant turn, so the diagram's branches describe
+possible handling paths rather than mutually exclusive response types.
+
+Protocol references: [Ollama OpenAI compatibility](https://docs.ollama.com/api/openai-compatibility)
+and [Ollama tool calling](https://docs.ollama.com/capabilities/tool-calling).
+The repository's [validation record](validation.md) establishes a successful
+file-tool probe; this documentation change does not claim a new inference run.
+
 ## Files and state outside this repository
 
 | Location | Owner and purpose |
