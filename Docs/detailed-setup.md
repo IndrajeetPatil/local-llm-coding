@@ -38,6 +38,10 @@ does not establish that a small model can reliably perform complex refactors.
 
 ## Setup and configuration
 
+![Setup stack: capacity checks, Homebrew tools, Ollama service, base model pull,
+and derived model configuration. Local state includes shared model weights,
+an isolated Copilot home with mode 0700, and a Homebrew login service.](images/setup-stack.png)
+
 ```bash
 make setup
 make verify
@@ -140,15 +144,23 @@ relocate Ollama's storage. Configure custom storage in the service itself.
 
 ## Verification
 
-`make verify` runs two checks:
+![Verification sequence: Copilot creates a temporary probe and checks exact
+file bytes and final reply; Ollama's API response is parsed and checked;
+external state is checked before reporting success.](images/quality-harness.png)
 
-1. Call Ollama's OpenAI-compatible endpoint and parse the JSON response with
-   `jq`. The assistant content must exactly equal `MAKEFILE_OLLAMA_OK`; a token
-   appearing only in reasoning or elsewhere in the JSON does not pass.
-2. Start Copilot in a fresh temporary directory with its normal tool definitions
+`make verify` runs the following checks in Makefile order, preparing tools
+and the configured model as prerequisites:
+
+1. Start Copilot in a fresh temporary directory with its normal tool definitions
    and write permission for the absolute `probe.txt` path. Verify the
    file's exact marker bytes (without a newline) and the exact final assistant
    response `MAKEFILE_COPILOT_OK`, parsed from Copilot's JSON event output.
+2. Call Ollama's OpenAI-compatible endpoint and parse the JSON response with
+   `jq`. The assistant content must exactly equal `MAKEFILE_OLLAMA_OK`; a token
+   appearing only in reasoning or elsewhere in the JSON does not pass.
+3. Run `make check-state` to validate tools, private directory permissions,
+   service definition, API health, and model/context state. Report success only
+   when all checks pass.
 
 The Copilot probe disables custom instructions and automatic access to other
 temporary paths. It explicitly denies shell tools and grants no URL or
