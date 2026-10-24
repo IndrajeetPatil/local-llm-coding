@@ -21,6 +21,20 @@ retain their paper background in both GitHub themes.
 
 ## Generation prompts
 
+### response-workflow.png
+
+Added on 2026-10-24 using built-in image generation, then two built-in image
+edits to clarify the permission branches and make the tool-result connector
+continuous. Visually checked the final labels and arrow directions. The figure
+describes the configured response flow, not a fresh runtime or packet capture.
+Existing architecture, setup and verification illustrations are retained.
+
+The figure highlights the OpenAI-compatible data contract: streaming JSON
+deltas, non-streaming messages, content, structured tool calls, permission
+checks and the tool-result loop. Text and tool calls can coexist in one turn.
+Protocol references are in the detailed guide. Full generation and correction
+prompts are preserved in [response-workflow-prompts.md](response-workflow-prompts.md).
+
 ### local-inference.png
 
 Scientific architecture infographic for GitHub documentation. Landscape 3:2, crisp legible typography and generous whitespace. Match Career Atlas DESIGN.md: warm paper #faf8f4, near-black ink #201d18, muted text #5d574c, hairline borders #e3ded2, sparse teal #14584d for arrows and meaningful emphasis. Fraunces-like serif title, Hanken Grotesk-like sans labels. Flat surfaces, tiny corner radii, no shadows, no gradients, no emoji, no decorative numbering. Use recognisable monochrome technology logos where appropriate plus restrained line icons. All labels must be accurate and legible. Title: 'Local coding inference'. Draw a large boundary 'Apple Silicon Mac'. Within it show Developer prompt → GitHub Copilot CLI (recognisable Copilot goggles icon) → Ollama (llama logo) → Qwen3.5 4B (model icon), with the model on shared CPU + GPU / unified memory. Label CLI-to-Ollama arrow 'Chat Completions · loopback HTTP' and endpoint '127.0.0.1:11434/v1'. Draw clearly directed return route from Qwen through Ollama to CLI labelled 'Response / proposed tool call'. A separate two-way branch from CLI to 'Project files' labelled 'Permission-controlled tools'. Below CLI label 'Terminal interaction'. A separate bottom note 'Initial installs and model downloads need internet'. Another note 'Approved tools may access the network'. Do not depict cloud inference, browser, dashboard or a database. Keep endpoint typography large.
