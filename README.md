@@ -63,13 +63,15 @@ then run `make stop` to stop Ollama and disable its automatic startup at login.
 
 Set `NO_COLOR=1` or `COLOR=never` for plain output.
 
-```mermaid
-flowchart LR
-    A["make start"] --> B["GitHub Copilot CLI"]
-    B -->|"Chat Completions over loopback"| C["Ollama"]
-    C --> D["Qwen3.5 4B · Apple GPU"]
-    D -->|"local response and tool calls"| B
-```
+## Local inference architecture
+
+![Local inference: Copilot CLI sends Chat Completions to Ollama over loopback;
+Qwen3.5 runs on the Mac's shared CPU/GPU memory. Responses and proposed tool
+calls return to Copilot, which executes permission-controlled file tools.](Docs/images/local-inference.png)
+
+`make start` launches Copilot CLI → loopback Ollama API → local Qwen3.5.
+Responses return through Ollama to Copilot; Copilot controls tool execution
+against project files. Inference can use both CPU and GPU.
 
 Provider settings apply only to the Copilot process started by Make. It uses
 offline mode, disabled telemetry and built-in MCP servers, and a separate
@@ -89,3 +91,5 @@ make start
 
 See [the detailed guide](Docs/detailed-setup.md) for configuration, state stored
 outside Git, manual API checks, troubleshooting, and the limits of verification.
+The guide also illustrates the [setup stack](Docs/detailed-setup.md#setup-and-configuration)
+and [verification harness](Docs/detailed-setup.md#verification).
