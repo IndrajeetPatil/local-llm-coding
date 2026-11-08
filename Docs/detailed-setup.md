@@ -9,16 +9,15 @@ model on the Mac and exposes an OpenAI-compatible Chat Completions endpoint at
 `http://127.0.0.1:11434/v1`. The `openai` provider setting selects this protocol;
 it does not send requests to OpenAI.
 
-The default model is `qwen3.5:4b`, a quantized, approximately 3.4 GB model with
-tool-calling and streaming support. It is a practical starting point for an
-8 GiB Apple Silicon Mac. Model weights, inference buffers, context caches,
+The default model is `qwen3.5:4b`, a 4.5B-parameter NVFP4 model of
+about 4.0 GB with tool-calling, thinking, and streaming support. It is a
+practical starting point for an 8 GiB Apple Silicon Mac. Model weights, inference buffers, context caches,
 macOS, and other apps share memory, so the download size is not the total RAM
 requirement. Close heavy applications if the machine starts swapping.
 
-The original guide described a 32 GiB M2 Pro running `qwen3.5:9b`; those were
-not the specifications of the Mac used for this repository's current validation.
-The 9B model remains an explicit option for machines with more memory. See
-[the validation record](validation.md) for the configuration actually tested.
+The 9B model, about 6.6 GB, is an option for Macs with at least 16 GiB of
+unified memory. See [the validation record](validation.md) for the configuration
+actually tested.
 
 Check a machine's capacity with:
 
@@ -71,7 +70,7 @@ another copy of the weights.
 
 The prompt and response budgets must fit within `CONTEXT_TOKENS`. The defaults
 also leave 4,096 tokens of headroom. Copilot's default tools and instructions
-alone consumed about 12.5K tokens in validation, so a 12K prompt budget cannot
+alone consumed about 12.6K tokens in validation, so a 12K prompt budget cannot
 start an ordinary coding session. Copilot's token limits alone do **not**
 configure Ollama's runtime context. The OpenAI-compatible API does not support
 `options.num_ctx`; setting it there has no effect. That is why the Makefile
@@ -109,7 +108,9 @@ The Makefile scopes these settings to the child Copilot process:
 
 Inherited provider credentials, headers, model-ID overrides, proxy settings,
 and global allow-all permissions are cleared. OpenTelemetry, built-in MCP
-servers, remote session export, and remote control are explicitly disabled.
+servers, and remote session export are explicitly disabled. Account-based
+remote connections are unavailable because offline mode disables GitHub
+authentication.
 The Makefile does not edit `~/.zshrc` or require a separate shell launcher.
 
 To work in another project directory, use the absolute path to this Makefile:
@@ -239,10 +240,11 @@ brew services restart ollama
 
 ### Slow responses or memory pressure
 
-The validated read/create task took 7 minutes 55 seconds on the 8 GiB M1.
-Ollama reported about 4.4 GB of model allocation split 31% CPU / 69% GPU.
-These percentages describe where the model is loaded, not instantaneous CPU
-or GPU utilization. See the [validation record](validation.md) for the setup.
+The validated read/create task took 2 minutes 41 seconds on the 8 GiB M1,
+including 81 seconds of initial prompt processing. `ollama ps` reported
+8.5–8.8 GB of model allocation, 100% GPU, on the MLX runner. These values
+describe where the model is loaded, not instantaneous CPU or GPU utilization.
+See the [validation record](validation.md) for the setup.
 
 1. **Check memory pressure before closing apps.** In Activity Monitor's Memory
    tab, look at Memory Pressure and whether Swap Used is growing during inference.
@@ -262,7 +264,7 @@ or GPU utilization. See the [validation record](validation.md) for the setup.
    another load and initial prompt-processing delay.
 3. **Keep the task and attached context small.** This reduces the extra work
    beyond Copilot's fixed instructions and tool definitions. Those alone used
-   about 12.5K tokens in validation, so closing apps will not eliminate the
+   about 12.6K tokens in validation, so closing apps will not eliminate the
    initial prompt-processing cost. A more restricted tool set can reduce that
    overhead, but it also removes capabilities and needs separate validation.
 4. **Consider a smaller model or a Mac with more unified memory if it remains
@@ -285,6 +287,14 @@ and [context memory requirements](https://docs.ollama.com/context-length).
 Text such as `{"name":"create", ...}` is not a tool execution. Run
 `make verify`; it fails unless Copilot actually creates the probe file. A
 model's advertised tool capability does not guarantee reliable agent behavior.
+
+### Model keeps calling shell commands
+
+The 4B model prefers shell commands, even for reading files. If you deny or
+decline shell access, it can retry shell calls instead of switching tools. Name
+Copilot's file tools in the prompt, for example "use the view tool to read
+`task.md`, then use the create tool to write the file". The
+[validation record](validation.md#scope-and-limits) shows both behaviors.
 
 ### Context-length errors
 

@@ -82,7 +82,7 @@ COPILOT_LOCAL = env \
 	NO_PROXY=127.0.0.1,localhost \
 	no_proxy=127.0.0.1,localhost \
 	copilot --model "$(LOCAL_MODEL)" --disable-builtin-mcps --no-auto-update \
-		--no-remote --no-remote-export
+		--no-remote-export
 
 .PHONY: help setup check-macos check-brew check-capacity prepare-copilot-home \
 	install-ollama install-copilot install-jq start-ollama pull-model configure-model start stop status \
