@@ -10,14 +10,15 @@ context window, and verifies inference and a real file-tool call.
 - At least 8 GiB unified memory and 10 GiB free disk for the default 4B model
 - Internet access for the initial software and model downloads
 
-The default is `qwen3.5:4b` (about 3.4 GB) with a 32,768-token runtime context.
+The default is `qwen3.5:4b` (about 4.0 GB) with a 32,768-token runtime context.
 No model-provider API key or GitHub login is required for local inference.
 
 > [!NOTE]
 > **Expect slow initial responses on an 8 GiB Mac.** Our M1 read-and-create
-> coding test took **7 minutes 55 seconds**. The model was split across CPU and
-> GPU, and Copilot's default instructions and tools already occupied about
-> 12.5K tokens before the task. This is one [measured run](Docs/validation.md),
+> coding test took **2 minutes 41 seconds**, of which 81 seconds was initial
+> prompt processing: Copilot's default instructions and tools already occupied
+> about 12.6K tokens before the task. Ollama ran the model entirely on the GPU
+> with its MLX runner. This is one [measured run](Docs/validation.md),
 > not a prediction for every prompt or Mac.
 
 > [!TIP]
