@@ -109,7 +109,9 @@ The Makefile scopes these settings to the child Copilot process:
 
 Inherited provider credentials, headers, model-ID overrides, proxy settings,
 and global allow-all permissions are cleared. OpenTelemetry, built-in MCP
-servers, remote session export, and remote control are explicitly disabled.
+servers, and remote session export are explicitly disabled. Account-based
+remote connections are unavailable because offline mode disables GitHub
+authentication; Copilot CLI 1.0.107 removed the separate `--no-remote` flag.
 The Makefile does not edit `~/.zshrc` or require a separate shell launcher.
 
 To work in another project directory, use the absolute path to this Makefile:
