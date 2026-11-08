@@ -1,7 +1,29 @@
 # Local validation
 
-Validated on 2026-09-18. These are checks performed on the local Mac, not hosted
-CI results or a benchmark of general coding ability.
+## Re-verification on 2026-11-08
+
+`make setup` and `make verify` passed with the latest Homebrew releases on the
+same Apple M1 with 8 GiB unified memory. The interactive coding session below
+was not repeated.
+
+| Component | Observed value |
+| --- | --- |
+| macOS | 27.0.1 |
+| Homebrew | 7.0.12 |
+| Ollama | 0.40.15 |
+| Copilot CLI in the isolated offline home | 1.0.107 |
+| jq | 1.8.2 |
+| Base model | `qwen3.5:4b`, 4.7B parameters, `Q4_K_M` |
+| `make verify` duration | 8 minutes 56 seconds |
+
+Copilot CLI 1.0.107 rejects the removed `--no-remote` flag, so the launcher
+no longer passes it. `qwen3.5` remains the newest Qwen family on Ollama with
+4B and 9B sizes; `qwen3.6` and `qwen3.8` start at 27B.
+
+## Initial validation on 2026-09-18
+
+These are checks performed on the local Mac, not hosted CI results or a
+benchmark of general coding ability.
 
 | Component | Observed value |
 | --- | --- |
@@ -23,7 +45,7 @@ The ordinary `copilot --version` reported 1.0.80 through the normal user's
 update cache. The isolated offline launcher used 1.0.78; the Makefile reports
 the version from that same isolated environment.
 
-## Checks completed
+### Checks completed
 
 - Installed Ollama and downloaded the 4B model; Ollama verified its SHA-256
   digest before writing the manifest.
@@ -57,7 +79,7 @@ the final 24,576-token prompt budget and 32,768-token runtime context supported
 the full session. `make verify` retains the normal tool definitions to detect
 this kind of startup regression.
 
-## Scope and limits
+### Scope and limits
 
 The 9B configuration is documented as an option for larger Macs and was not
 run on this machine. The 4B model uses both CPU and GPU under the observed
