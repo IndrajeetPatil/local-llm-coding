@@ -44,7 +44,7 @@ card <- image_blank(width, height, color = bg) |>
         location = sprintf("+%d+%d", margin, 306)
     ) |>
     image_annotate(
-        "github.com/IndrajeetPatil/local-llm-coding",
+        "www.indrapatil.com/local-llm-coding",
         font = "Hanken Grotesk",
         weight = 600,
         size = 26,
