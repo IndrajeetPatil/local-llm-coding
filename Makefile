@@ -3,6 +3,7 @@ SHELL := /bin/zsh
 .DEFAULT_GOAL := help
 .NOTPARALLEL:
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+BREWFILE := $(dir $(MAKEFILE_PATH))Brewfile
 
 MODEL ?= qwen3.5:4b
 OLLAMA_URL ?= http://127.0.0.1:11434
@@ -85,7 +86,7 @@ COPILOT_LOCAL = env \
 		--no-remote-export
 
 .PHONY: help setup check-macos check-brew check-capacity prepare-copilot-home \
-	install-ollama install-copilot install-jq start-ollama pull-model configure-model start stop status \
+	install-tools start-ollama pull-model configure-model start stop status \
 	check-config check-state verify verify-ollama verify-copilot docs docs-serve
 
 help:
@@ -94,7 +95,7 @@ help:
 	@printf '$(BOLD)Usage$(RESET)\n  make $(CYAN)<target>$(RESET)\n\n'
 	@printf '$(BOLD)Targets$(RESET)\n'
 	@printf '  $(CYAN)%-12s$(RESET) %s\n' \
-		'setup' 'Install tools, start Ollama, and download the model' \
+		'setup' 'Install the Brewfile tools, start Ollama, and download the model' \
 		'start' 'Start Ollama and open Copilot CLI with the local model' \
 		'stop' 'Stop Ollama (exit Copilot separately from its UI)' \
 		'status' 'Show service, API, and model status' \
@@ -111,7 +112,7 @@ help:
 	@printf '  COPILOT_LOCAL_HOME=$$HOME/.copilot-local-offline\n'
 	@printf '  COLOR=always|never  $(DIM)(or set NO_COLOR=1)$(RESET)\n\n'
 
-setup: check-macos check-brew check-capacity install-jq install-ollama install-copilot configure-model
+setup: check-macos check-brew check-capacity install-tools prepare-copilot-home configure-model
 	@$(MAKE) --no-print-directory -f "$(MAKEFILE_PATH)" check-state
 	@printf '\n$(OK) $(BOLD)Setup complete.$(RESET) Run "make verify" or "make start".\n'
 
@@ -158,20 +159,12 @@ check-capacity: check-macos check-config
 		"$$(( memory_bytes / 1024 / 1024 / 1024 ))" \
 		"$$(( free_kib / 1024 / 1024 ))"
 
-install-ollama: check-brew
-	@if brew list --formula ollama >/dev/null 2>&1; then \
-		printf '$(SKIP) Ollama is already installed: '; \
-		brew list --versions ollama; \
+install-tools: check-brew
+	@if brew bundle check --file="$(BREWFILE)" --no-upgrade >/dev/null 2>&1; then \
+		printf '$(SKIP) Brewfile tools are already installed.\n'; \
 	else \
-		printf '$(INFO) Installing Ollama with Homebrew...\n'; \
-		brew install ollama; \
-	fi
-
-install-jq: check-brew
-	@if command -v jq >/dev/null 2>&1; then \
-		printf '$(SKIP) jq is already installed.\n'; \
-	else \
-		brew install jq; \
+		printf '$(INFO) Installing Brewfile tools with Homebrew...\n'; \
+		brew bundle install --file="$(BREWFILE)" --no-upgrade; \
 	fi
 
 prepare-copilot-home: check-macos
@@ -180,16 +173,7 @@ prepare-copilot-home: check-macos
 	@printf '$(OK) Isolated Copilot home: %s $(DIM)(mode 0700)$(RESET)\n' \
 		"$(COPILOT_LOCAL_HOME)"
 
-install-copilot: check-brew prepare-copilot-home
-	@if command -v copilot >/dev/null 2>&1; then \
-		printf '$(SKIP) GitHub Copilot CLI is already installed: '; \
-		$(COPILOT_LOCAL) --version | head -1; \
-	else \
-		printf '$(INFO) Installing GitHub Copilot CLI with Homebrew...\n'; \
-		brew install --cask copilot-cli; \
-	fi
-
-start-ollama: install-ollama
+start-ollama: install-tools
 	@if $(CURL) --max-time 2 -fsS "$(OLLAMA_URL)/api/version" >/dev/null 2>&1; then \
 		printf '$(SKIP) Ollama is already running at %s.\n' "$(OLLAMA_URL)"; \
 	else \
@@ -215,14 +199,14 @@ pull-model: check-capacity start-ollama
 		$(OLLAMA) pull "$(MODEL)"; \
 	fi
 
-configure-model: install-jq pull-model
+configure-model: install-tools pull-model
 	@model_file="$$(mktemp "$${TMPDIR:-/tmp}/local-coding-model.XXXXXX")"; \
 	trap 'rm -f -- "$$model_file"' EXIT; \
 	printf 'FROM %s\nPARAMETER num_ctx %s\n' "$(MODEL)" "$(CONTEXT_TOKENS)" > "$$model_file"; \
 	$(OLLAMA) create "$(LOCAL_MODEL)" -f "$$model_file"; \
 	printf '$(OK) Model %s configured with %s context tokens.\n' "$(LOCAL_MODEL)" "$(CONTEXT_TOKENS)"
 
-start: check-macos install-copilot configure-model
+start: check-macos install-tools prepare-copilot-home configure-model
 	@$(MAKE) --no-print-directory -f "$(MAKEFILE_PATH)" check-state
 	@printf '\n$(INFO) $(BOLD)Starting Copilot CLI$(RESET) with %s\n' "$(LOCAL_MODEL)"
 	@printf '$(DIM)Exit Copilot from its UI, then run "make stop" to stop Ollama.$(RESET)\n\n'
@@ -323,7 +307,7 @@ verify-ollama: configure-model
 	fi; \
 	printf '$(OK) Ollama returned the expected response.\n'
 
-verify-copilot: install-copilot configure-model
+verify-copilot: install-tools prepare-copilot-home configure-model
 	@printf '$(INFO) Testing Copilot CLI tool execution...\n'
 	@tmp_dir="$$(mktemp -d "$${TMPDIR:-/tmp}/local-llm-coding.XXXXXX")"; \
 	tmp_dir="$$(cd "$$tmp_dir" && pwd -P)"; \
