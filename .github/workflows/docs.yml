@@ -32,8 +32,10 @@ jobs:
         with:
           enable-cache: false
 
+      # The Makefile targets macOS and uses zsh, which Ubuntu runners lack;
+      # the docs recipe runs the same under bash.
       - name: Build the site
-        run: make docs
+        run: make SHELL=/bin/bash docs
 
       - name: Upload the site
         if: github.ref == 'refs/heads/main'
