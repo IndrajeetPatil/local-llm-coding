@@ -1,0 +1,13 @@
+# Jinja templates in overrides/ hold placeholders, not links; site/ and .venv/
+# are local build output.
+exclude_path = [
+  "overrides",
+  "site",
+  ".venv",
+]
+
+# The documentation site is deployed from main, so its pages do not exist
+# until this pull request merges.
+exclude = [
+  "^https://www\\.indrapatil\\.com/local-llm-coding/",
+]

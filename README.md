@@ -1,4 +1,4 @@
-# Local LLM coding with GitHub Copilot CLI <img src="docs/images/logo.png" align="right" width="240" alt="local-llm-coding hex sticker" />
+# Local LLM coding with GitHub Copilot CLI <img src="https://raw.githubusercontent.com/IndrajeetPatil/local-llm-coding/main/docs/images/logo.png" align="right" width="240" alt="local-llm-coding hex sticker" />
 
 Run Qwen3.5 locally on an Apple Silicon Mac with Ollama and use it from GitHub
 Copilot CLI. The Makefile installs missing tools, downloads the model, sets its
@@ -18,7 +18,7 @@ No model-provider API key or GitHub login is required for local inference.
 > coding test took **2 minutes 41 seconds**, of which 81 seconds was initial
 > prompt processing: Copilot's default instructions and tools already occupied
 > about 12.6K tokens before the task. Ollama ran the model entirely on the GPU
-> with its MLX runner. This is one [measured run](docs/validation.md),
+> with its MLX runner. This is one [measured run](https://www.indrapatil.com/local-llm-coding/validation/),
 > not a prediction for every prompt or Mac.
 
 > [!TIP]
@@ -33,7 +33,7 @@ No model-provider API key or GitHub login is required for local inference.
 > - Keep tasks focused and attach only relevant files. This reduces added
 >   context, although Copilot's initial instructions and tools still have a cost.
 > - Check **Activity Monitor → Memory → Memory Pressure** and `make status`.
->   See [performance troubleshooting](docs/detailed-setup.md#slow-responses-or-memory-pressure)
+>   See [performance troubleshooting](https://www.indrapatil.com/local-llm-coding/detailed-setup/#slow-responses-or-memory-pressure)
 >   for interpreting the results and considering smaller models or more RAM.
 
 ## Quick start
@@ -68,7 +68,7 @@ Set `NO_COLOR=1` or `COLOR=never` for plain output.
 
 ![Local inference: Copilot CLI sends Chat Completions to Ollama over loopback;
 Qwen3.5 runs on the Mac's shared CPU/GPU memory. Responses and proposed tool
-calls return to Copilot, which executes permission-controlled file tools.](docs/images/local-inference.png)
+calls return to Copilot, which executes permission-controlled file tools.](https://raw.githubusercontent.com/IndrajeetPatil/local-llm-coding/main/docs/images/local-inference.png)
 
 `make start` launches Copilot CLI → loopback Ollama API → local Qwen3.5.
 Responses return through Ollama to Copilot; Copilot controls tool execution
@@ -79,7 +79,7 @@ against project files. Inference can use both CPU and GPU.
 ![Local response workflow: Qwen3.5 generates text or a tool proposal; Ollama
 encodes it as OpenAI-compatible Chat Completions; Copilot assembles the response,
 displays text, checks tool permissions, and returns tool results for another
-inference turn.](docs/images/response-workflow.png)
+inference turn.](https://raw.githubusercontent.com/IndrajeetPatil/local-llm-coding/main/docs/images/response-workflow.png)
 
 Ollama provides the shared message format that Copilot understands. Interactive
 responses stream as server-sent events (SSE) carrying JSON deltas; Copilot
@@ -89,7 +89,7 @@ return in the conversation for another local inference turn. This can repeat
 before the final reply. A denied tool does not execute, and text that merely
 looks like a tool call does not execute either.
 
-See [response handling and the wire format](docs/detailed-setup.md#response-handling-and-the-wire-format)
+See [response handling and the wire format](https://www.indrapatil.com/local-llm-coding/detailed-setup/#response-handling-and-the-wire-format)
 for the fields and the distinction between streaming and the direct API check.
 
 Provider settings apply only to the Copilot process started by Make. It uses
@@ -108,7 +108,7 @@ make verify
 make start
 ```
 
-See [the detailed guide](docs/detailed-setup.md) for configuration, state stored
+See [the detailed guide](https://www.indrapatil.com/local-llm-coding/detailed-setup/) for configuration, state stored
 outside Git, manual API checks, troubleshooting, and the limits of verification.
-The guide also illustrates the [setup stack](docs/detailed-setup.md#setup-and-configuration)
-and [verification harness](docs/detailed-setup.md#verification).
+The guide also illustrates the [setup stack](https://www.indrapatil.com/local-llm-coding/detailed-setup/#setup-and-configuration)
+and [verification harness](https://www.indrapatil.com/local-llm-coding/detailed-setup/#verification).

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "local-llm-coding",
+    "description": "Run GitHub Copilot CLI with a locally hosted Qwen3.5 model through Ollama on an Apple Silicon Mac; a Makefile installs, configures, and verifies the stack.",
+    "url": "https://www.indrapatil.com/local-llm-coding/",
+    "codeRepository": "https://github.com/IndrajeetPatil/local-llm-coding",
+    "programmingLanguage": {
+      "@type": "ComputerLanguage",
+      "name": "Makefile"
+    },
+    "license": "https://opensource.org/licenses/MIT",
+    "author": {
+      "@type": "Person",
+      "name": "Indrajeet Patil",
+      "url": "https://www.indrapatil.com/",
+      "sameAs": "https://orcid.org/0000-0003-1995-6531"
+    },
+    "keywords": ["local LLM", "Ollama", "GitHub Copilot CLI", "Qwen", "Apple Silicon", "offline coding assistant"]
+  }
+  </script>
+  <meta name="citation_title" content="local-llm-coding: GitHub Copilot CLI with local Ollama models" />
+  <meta name="citation_author" content="Indrajeet Patil" />
+  <link rel="alternate" type="text/plain" href="/local-llm-coding/llms.txt" title="LLM-friendly documentation summary" />
+  <link rel="alternate" type="text/plain" href="/local-llm-coding/llms-full.txt" title="Full LLM documentation" />
+{% endblock %}

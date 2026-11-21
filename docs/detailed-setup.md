@@ -1,7 +1,5 @@
 # Detailed setup: Ollama with GitHub Copilot CLI
 
-[Back to the quick start](../README.md)
-
 ## Architecture and model sizing
 
 Copilot CLI supplies the interactive coding agent and tools. Ollama runs the
@@ -124,7 +122,7 @@ make -f /path/to/local-llm-coding/Makefile start
 
 The response path is Qwen3.5 → Ollama's OpenAI-compatible API → Copilot's
 provider adapter → terminal output or permission-controlled tool execution.
-The [response workflow illustration](../README.md#from-model-response-to-local-action)
+The [response workflow illustration](https://www.indrapatil.com/local-llm-coding/#from-model-response-to-local-action)
 shows both branches and the tool-result loop. This describes the configured
 protocol and client responsibilities, rather than a captured packet trace.
 
