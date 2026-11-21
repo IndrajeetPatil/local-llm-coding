@@ -46,7 +46,8 @@ make start
 ```
 
 `make setup` checks capacity, installs missing Ollama, Copilot CLI, and `jq`
-through Homebrew, starts the Ollama login service, and downloads the base model.
+from the repository's `Brewfile` with `brew bundle`, starts the Ollama login
+service, and downloads the base model.
 It then creates a derived model containing an explicit `num_ctx` parameter.
 The derived model shares the base model's weight blobs; it does not download
 another copy of the weights.
