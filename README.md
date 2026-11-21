@@ -1,4 +1,4 @@
-# Local LLM coding with GitHub Copilot CLI
+# Local LLM coding with GitHub Copilot CLI <img src="docs/images/logo.png" align="right" width="240" alt="local-llm-coding hex sticker" />
 
 Run Qwen3.5 locally on an Apple Silicon Mac with Ollama and use it from GitHub
 Copilot CLI. The Makefile installs missing tools, downloads the model, sets its
