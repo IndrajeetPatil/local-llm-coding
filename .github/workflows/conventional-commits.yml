@@ -1,0 +1,64 @@
+name: Conventional Commits
+
+# Checks every commit on a pull request and its title (the squash subject)
+# against Conventional Commits. `edited` re-checks a corrected title.
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: conventional-commits-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  commits:
+    name: Conventional Commits
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
+        with:
+          enable-cache: false
+
+      - name: Check commit messages and title
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          # Passing any type replaces the linter's defaults (except feat and
+          # fix), so list the Conventional Commits types explicitly; --strict
+          # also rejects fixup! and merge commits.
+          check() {
+            uvx --from conventional-pre-commit==4.5.0 conventional-pre-commit \
+              --verbose --strict \
+              build chore ci docs feat fix perf refactor revert style test "$1"
+          }
+
+          message="$RUNNER_TEMP/message"
+          status=0
+          for commit in $(git rev-list --reverse --end-of-options "${BASE_SHA}..${HEAD_SHA}"); do
+            echo "Checking commit $commit"
+            git show --no-patch --format=%B "$commit" > "$message"
+            check "$message" || status=1
+          done
+
+          echo "Checking pull request title"
+          printf '%s\n' "$PR_TITLE" > "$message"
+          check "$message" || status=1
+          exit "$status"

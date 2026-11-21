@@ -18,7 +18,7 @@ No model-provider API key or GitHub login is required for local inference.
 > coding test took **2 minutes 41 seconds**, of which 81 seconds was initial
 > prompt processing: Copilot's default instructions and tools already occupied
 > about 12.6K tokens before the task. Ollama ran the model entirely on the GPU
-> with its MLX runner. This is one [measured run](Docs/validation.md),
+> with its MLX runner. This is one [measured run](docs/validation.md),
 > not a prediction for every prompt or Mac.
 
 > [!TIP]
@@ -33,7 +33,7 @@ No model-provider API key or GitHub login is required for local inference.
 > - Keep tasks focused and attach only relevant files. This reduces added
 >   context, although Copilot's initial instructions and tools still have a cost.
 > - Check **Activity Monitor → Memory → Memory Pressure** and `make status`.
->   See [performance troubleshooting](Docs/detailed-setup.md#slow-responses-or-memory-pressure)
+>   See [performance troubleshooting](docs/detailed-setup.md#slow-responses-or-memory-pressure)
 >   for interpreting the results and considering smaller models or more RAM.
 
 ## Quick start
@@ -46,9 +46,9 @@ make verify
 make start
 ```
 
-The repository is private; cloning it requires GitHub access. `make start`
-opens Copilot CLI using the local model. Exit Copilot from its UI when finished,
-then run `make stop` to stop Ollama and disable its automatic startup at login.
+`make start` opens Copilot CLI using the local model. Exit Copilot from its UI
+when finished, then run `make stop` to stop Ollama and disable its automatic
+startup at login.
 
 ## Commands
 
@@ -68,7 +68,7 @@ Set `NO_COLOR=1` or `COLOR=never` for plain output.
 
 ![Local inference: Copilot CLI sends Chat Completions to Ollama over loopback;
 Qwen3.5 runs on the Mac's shared CPU/GPU memory. Responses and proposed tool
-calls return to Copilot, which executes permission-controlled file tools.](Docs/images/local-inference.png)
+calls return to Copilot, which executes permission-controlled file tools.](docs/images/local-inference.png)
 
 `make start` launches Copilot CLI → loopback Ollama API → local Qwen3.5.
 Responses return through Ollama to Copilot; Copilot controls tool execution
@@ -79,7 +79,7 @@ against project files. Inference can use both CPU and GPU.
 ![Local response workflow: Qwen3.5 generates text or a tool proposal; Ollama
 encodes it as OpenAI-compatible Chat Completions; Copilot assembles the response,
 displays text, checks tool permissions, and returns tool results for another
-inference turn.](Docs/images/response-workflow.png)
+inference turn.](docs/images/response-workflow.png)
 
 Ollama provides the shared message format that Copilot understands. Interactive
 responses stream as server-sent events (SSE) carrying JSON deltas; Copilot
@@ -89,7 +89,7 @@ return in the conversation for another local inference turn. This can repeat
 before the final reply. A denied tool does not execute, and text that merely
 looks like a tool call does not execute either.
 
-See [response handling and the wire format](Docs/detailed-setup.md#response-handling-and-the-wire-format)
+See [response handling and the wire format](docs/detailed-setup.md#response-handling-and-the-wire-format)
 for the fields and the distinction between streaming and the direct API check.
 
 Provider settings apply only to the Copilot process started by Make. It uses
@@ -108,7 +108,7 @@ make verify
 make start
 ```
 
-See [the detailed guide](Docs/detailed-setup.md) for configuration, state stored
+See [the detailed guide](docs/detailed-setup.md) for configuration, state stored
 outside Git, manual API checks, troubleshooting, and the limits of verification.
-The guide also illustrates the [setup stack](Docs/detailed-setup.md#setup-and-configuration)
-and [verification harness](Docs/detailed-setup.md#verification).
+The guide also illustrates the [setup stack](docs/detailed-setup.md#setup-and-configuration)
+and [verification harness](docs/detailed-setup.md#verification).

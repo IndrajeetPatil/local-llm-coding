@@ -1,0 +1,6 @@
+# Every action stays pinned to a full commit SHA.
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        "*": hash-pin

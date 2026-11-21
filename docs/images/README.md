@@ -5,9 +5,8 @@ They depict the repository's Makefile and documentation, not new validation
 results. Text equivalents remain beside each figure in the consuming pages.
 Generated technology marks are illustrative, not official logo artwork.
 
-Style reference read on
-2026-10-24: warm paper, ink serif headings, sans labels, restrained teal,
-hairline rules, flat surfaces, and no shadows. Raster figures intentionally
+Style: warm paper, ink serif headings, sans labels, restrained teal, hairline
+rules, flat surfaces, and no shadows. Raster figures intentionally
 retain their paper background in both GitHub themes.
 
 ## Accuracy checklist
