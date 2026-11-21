@@ -21,7 +21,8 @@ marked with a sparkle. To regenerate the sticker:
    Rscript hextools/script.R
    ```
 
-   The sticker is written to `docs/images/logo.png`.
+   The sticker is written to `docs/images/logo.png`, and a small copy to
+   `docs/images/favicon.ico` for the documentation site.
 
 ## Generating the social card
 

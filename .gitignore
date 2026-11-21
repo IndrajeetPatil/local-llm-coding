@@ -7,3 +7,7 @@
 .copilot-local-offline/
 *.log
 copilot-session-*.md
+
+# Documentation site build and its uv environment.
+.venv/
+site/

@@ -36,11 +36,18 @@ edge_angle <- pi / 6
 inset <- 0.08 * cos(edge_angle)
 logo <- logo +
     geom_url(
-        "github.com/IndrajeetPatil/local-llm-coding",
+        "www.indrapatil.com/local-llm-coding",
         x = 1 + sqrt(3) / 4 - inset * sin(edge_angle),
         y = 0.25 + inset * cos(edge_angle),
-        size = 5,
+        size = 6,
         color = "grey",
         hjust = 0.5
     )
 save_sticker(logo_file, logo, dpi = 600)
+
+# The documentation site's favicon: the same square sticker, at icon size.
+image_read(logo_file) |>
+    image_background("none") |>
+    image_extent("1200x1200", gravity = "center", color = "none") |>
+    image_resize("48x48") |>
+    image_write("docs/images/favicon.ico", format = "ico")

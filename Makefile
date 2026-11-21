@@ -86,7 +86,7 @@ COPILOT_LOCAL = env \
 
 .PHONY: help setup check-macos check-brew check-capacity prepare-copilot-home \
 	install-ollama install-copilot install-jq start-ollama pull-model configure-model start stop status \
-	check-config check-state verify verify-ollama verify-copilot
+	check-config check-state verify verify-ollama verify-copilot docs docs-serve
 
 help:
 	@printf '\n$(BOLD)Local Ollama + GitHub Copilot CLI$(RESET)\n'
@@ -100,6 +100,8 @@ help:
 		'status' 'Show service, API, and model status' \
 		'check-state' 'Validate required external files and services' \
 		'verify' 'Test inference and Copilot tool execution' \
+		'docs' 'Build the documentation site into site/, failing on any warning' \
+		'docs-serve' 'Preview the documentation site at http://localhost:8000' \
 		'help' 'Show this help'
 	@printf '\n$(BOLD)Overrides$(RESET)\n'
 	@printf '  MODEL=%s OLLAMA_URL=%s\n' \
@@ -352,3 +354,9 @@ verify-copilot: install-copilot configure-model
 		exit 1; \
 	fi; \
 	printf '$(OK) Copilot executed a file tool and returned the expected response.\n'
+
+docs:
+	uv run --locked zensical build --strict --clean
+
+docs-serve:
+	uv run --locked zensical serve --open
