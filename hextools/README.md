@@ -6,8 +6,8 @@ GitHub social preview card.
 ## Generating the logo
 
 The sticker artwork is `data.svg`, an original vector drawing: a laptop
-terminal whose requests loop back and forth to a local model chip marked with a
-sparkle. To regenerate the sticker:
+terminal that sends requests to, and gets responses from, a local model chip
+marked with a sparkle. To regenerate the sticker:
 
 1. **Install R dependencies**:
 

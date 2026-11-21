@@ -7,17 +7,16 @@
   <rect x="30" y="80" width="42" height="6" rx="3" fill="#5d574c"/>
   <path d="M4 110 H148 L140 122 H12 Z" fill="#201d18" stroke="#201d18" stroke-width="4" stroke-linejoin="round"/>
   <!-- Loopback: the request goes to the local model and the response comes back -->
-  <g fill="none" stroke="#5d574c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M146 40 C162 30 172 30 184 38"/>
-    <path d="M176 32 L185 38 L176 45"/>
-    <path d="M184 86 C172 94 162 94 146 84"/>
-    <path d="M154 78 L145 84 L154 91"/>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 50 H174" fill="none" stroke="#5d574c" stroke-width="6"/>
+    <path d="M172 41 L186 50 L172 59 Z" fill="#5d574c" stroke="#5d574c" stroke-width="3"/>
+    <path d="M184 74 H160" fill="none" stroke="#5d574c" stroke-width="6"/>
+    <path d="M162 65 L148 74 L162 83 Z" fill="#5d574c" stroke="#5d574c" stroke-width="3"/>
   </g>
   <!-- The local model: a chip -->
   <g stroke="#201d18" stroke-width="5" stroke-linecap="round">
     <path d="M204 30 V22 M218 30 V22 M232 30 V22"/>
     <path d="M204 102 V110 M218 102 V110 M232 102 V110"/>
-    <path d="M190 52 H182 M190 72 H182"/>
     <path d="M246 52 H254 M246 72 H254"/>
   </g>
   <rect x="190" y="30" width="56" height="72" rx="10" fill="#14584d"/>
