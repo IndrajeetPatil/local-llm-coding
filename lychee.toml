@@ -5,9 +5,3 @@ exclude_path = [
   "site",
   ".venv",
 ]
-
-# The documentation site is deployed from main, so its pages do not exist
-# until this pull request merges.
-exclude = [
-  "^https://www\\.indrapatil\\.com/local-llm-coding/",
-]
