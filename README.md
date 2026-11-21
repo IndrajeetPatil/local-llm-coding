@@ -46,9 +46,9 @@ make verify
 make start
 ```
 
-The repository is private; cloning it requires GitHub access. `make start`
-opens Copilot CLI using the local model. Exit Copilot from its UI when finished,
-then run `make stop` to stop Ollama and disable its automatic startup at login.
+`make start` opens Copilot CLI using the local model. Exit Copilot from its UI
+when finished, then run `make stop` to stop Ollama and disable its automatic
+startup at login.
 
 ## Commands
 
