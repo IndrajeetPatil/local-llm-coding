@@ -1,14 +1,15 @@
 # Response workflow generation prompts
 
 Built-in image generation; opaque paper background. Final asset:
-`response-workflow.png`. Technology marks are generated illustrations.
+`response-workflow.png`. The Copilot mark matches the product logo in
+`local-inference.png`; the Ollama mark is illustrative.
 
 ## Initial generation
 
 Use case: infographic-diagram
 Asset type: scientific workflow infographic for repository documentation, landscape 3:2, high resolution, large readable labels.
 Title verbatim: "How a local response becomes an action"
-Style: Warm paper #faf8f4, ink #201d18 headings, muted ink #5d574c notes, hairline #e3ded2 rules, sparse teal #14584d arrows. Fraunces-like serif title and Hanken Grotesk-like sans labels. Flat precise technical illustration with ample whitespace, no shadows, gradients, glossy effects, invented numbering or decoration. Use monochrome Ollama llama and GitHub Copilot goggles marks beside their names, plus small chip, document, terminal and permission icons. Marks are illustrative.
+Style: Warm paper #faf8f4, ink #201d18 headings, muted ink #5d574c notes, hairline #e3ded2 rules, sparse teal #14584d arrows. Fraunces-like serif title and Hanken Grotesk-like sans labels. Flat precise technical illustration with ample whitespace, no shadows, gradients, glossy effects, invented numbering or decoration. Use the exact GitHub Copilot product mark from `local-inference.png` beside the Copilot CLI name. Use an illustrative monochrome Ollama llama mark plus small chip, document, terminal and permission icons.
 Layout: clear top left-to-right response pipeline, with a lower tool loop. One thin enclosing boundary labelled "Apple Silicon Mac · default loopback inference".
 Top row three stages:
 "Qwen3.5" / "Generates text or a tool proposal" with CPU + GPU chip icon.
