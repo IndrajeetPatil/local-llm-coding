@@ -1,7 +1,7 @@
 site_name: local-llm-coding
 site_description: Run GitHub Copilot CLI with locally hosted Ollama models on Apple Silicon Macs
 site_url: https://www.indrapatil.com/local-llm-coding/
-site_author: IndrajeetPatil
+site_author: Indrajeet Patil
 
 repo_name: local-llm-coding
 repo_url: https://github.com/IndrajeetPatil/local-llm-coding
