@@ -91,7 +91,9 @@ explicitly asked; they only work on an Apple Silicon Mac. `make status` and
   on `main` and by hand, to deploy the site.
 
 - Pin every action to a full commit SHA with its most specific release in an
-  inline comment (`# v7.0.1`), never a sliding tag such as `v7`.
+  inline comment (`# v7.0.1`), never a sliding tag such as `v7`. First-party
+  reusable workflows from `IndrajeetPatil/workflows` are the exception: they
+  are called at `@main` by design, and `.github/zizmor.yml` allows that.
 
 - Default `GITHUB_TOKEN` to `contents: read` at the workflow level, and grant
   write scopes only to the job that needs them, with a comment saying why.
