@@ -1,6 +1,8 @@
-# Every action stays pinned to a full commit SHA.
+# Every action stays pinned to a full commit SHA, except the owner's
+# first-party reusable workflows, which are called at @main by design.
 rules:
   unpinned-uses:
     config:
       policies:
+        "IndrajeetPatil/*": ref-pin
         "*": hash-pin
